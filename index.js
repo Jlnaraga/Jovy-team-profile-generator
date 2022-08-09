@@ -1,47 +1,46 @@
-const engineer = require('./lib/engineer');
-const intern = require('./lib/intern');
-const manager = require('./lib/manager');
+const Engineer = require('./lib/engineer');
+const Intern = require('./lib/intern');
+const Manager = require('./lib/manager');
 
 const inquirer = require('inquirer');
 const fs = require('fs');
 const path = require('path');
+const generateHTML = require ('./generateHTML.js')
+
+
+const output_dir = path.resolve(__dirname, "output");
+const outputPath = path.join(output_dir, "generatedHtml")
 
 
 const myTeam = [];
-additonalTeam();
-function init(){
-    generateHTML();
-}
+const manager = [];
+const engineer =[];
+const intern = [];
 
-function additonalTeam(){
+function managerData() {
     inquirer.prompt ([ 
         {
             type: "input",
-            message: "What is the employee's name?",
+            message: "Manager's name?",
             answer: "name",
             
         },
         {
             type: "input",
-            message: "ID badge number",
-            name: "badgeNumber",
+            message: "Manager's id",
+            name: "id",
             
         },
         {
             type: "input",
-            message: "What's the Email address",
+            message: "Enter's Email address",
             name: "email",
            
         },
         {
             type: "input",
-            message: "What type of employee?",
-            choices: [
-                "Manager",
-                "Engineer",
-                "intern"
-            ],
-            name: "role"
+            message: "Manager's office number",
+            name: "officeNumber"
             
         },
         {
@@ -50,17 +49,19 @@ function additonalTeam(){
             name: "userName",
         },
     ])
-    .then(function ({name, badgeNumber, email, role, userName}) {
-        let employeeInfo = "";
-
-        if (role === 'Engineer') {
-            employeeInfo = 'gitHub userName';
-        } else if (role === 'Intern') {
-            employeeInfo = 'gitHub userName'
-        } else {
-            employeeInfo = 'gitHub userName'
-        }
-    })
+    .then((val) => {
+        const manager = new Manager (
+            val.name,
+            val.id,
+            val.email,
+            val.officeNumber,
+            val.userName
+        );
+        addMyteam();
+    });
+}
+      
+     
     inquirer.prompt([
     {
         type: 'list',
@@ -104,7 +105,7 @@ function additonalTeam(){
 
     });
 
-};
+
 
 
 
