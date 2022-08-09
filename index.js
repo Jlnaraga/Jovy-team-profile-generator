@@ -14,9 +14,9 @@ const output_dir = path.resolve(__dirname, "output");
 
 
 const myTeam = [];
-const Manager = [];
-const Engineer =[];
-const Intern = [];
+//const Manager = [];
+//const Engineer =[];
+//const Intern = [];
 
 function managerData() {
     inquirer.prompt ([ 
@@ -95,28 +95,37 @@ function addMyteam() {
     ])
 
         .then(function({role, name, id, email, userName}){
-            let roleInfo = "";
+            let roleData = "";
             if (role === "Engineer") {
-                roleInfo = "gitHub userName";
+                roleData = "gitHub userName";
             }else if ( role === "Intern" ) {
-                roleInfo = "School Name";
+                roleData = "School Name";
             }
             
             inquirer.prompt([{
-                message: `Enter team member's ${roleInfo}`,
-                name: "roleInfo"
+                message: `Enter team member's ${roleData}`,
+                name: "roleData"
             },
             {
                 type: 'list',
-                name: 'addMoreMembers',
                 message: 'Do you want to add another team member?',
                 choices: ['yes','no'],
                 name: "members"
             }])
+            .then (function({roleData, members}) {
+                let newMember;
+                if (role === "Engineer") {
+                    newMember = new Engineer(role, name, id, email, userName);
+            } else if (role === "Manager") {
+                    newMember = new Manager (role, name, id, email, userName);
+            }else {
+                newMember = new Intern (role, name, id, email, userName);
+            }
+            employees.push(newMember);
+        })
+    })
+}
     
-        })    
-    }
-
 
     
 
