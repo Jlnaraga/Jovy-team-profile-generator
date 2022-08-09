@@ -1,3 +1,4 @@
+const Employee = require ('./lib/employee')
 const Engineer = require('./lib/engineer');
 const Intern = require('./lib/intern');
 const Manager = require('./lib/manager');
@@ -9,13 +10,13 @@ const generateHTML = require ('./generateHTML.js')
 
 
 const output_dir = path.resolve(__dirname, "output");
-const outputPath = path.join(output_dir, "generatedHtml")
+//const outputPath = path.join(output_dir, "generatedHtml")
 
 
 const myTeam = [];
-const manager = [];
-const engineer =[];
-const intern = [];
+const Manager = [];
+const Engineer =[];
+const Intern = [];
 
 function managerData() {
     inquirer.prompt ([ 
@@ -50,7 +51,7 @@ function managerData() {
         },
     ])
     .then((val) => {
-        const manager = new Manager (
+        const Manager = new Manager (
             val.name,
             val.id,
             val.email,
@@ -61,49 +62,65 @@ function managerData() {
     });
 }
       
-     
+function addMyteam() { 
     inquirer.prompt([
-    {
-        type: 'list',
-        name: 'addMoreMembers',
-        message: 'Would you like to add another team member?',
-        choices: [
-            'yes',
-            'no'
-        ]
-    }])
+        {
+            type: "list",
+            message: "Please choose a team member",
+            choices: ["Engineer", "Intern"],  
+            name: "role",
+        },
+        {
+            type: "input",
+            message:"Please enter team member's name",
+            name: "name",
+        },
+        {
+            type: "input",
+            message: "Please input member id",
+            name: "id",
+            
+        },
+        {
+            type: "input",
+            message: "Enter's Email address",
+            name: "email",
+           
+        },
+        {
+            type: "input",
+            message:"Github Username",
+            name: "userName",
+        },
+    ])
 
-    .then(function({addMoreTeam, employeeInfo}) {
-
-        let newTeam;
-
-        if (role === 'Engineer') {
-
-            newTeam = new Engineer( name, badgeNumber, email, userName);
-
-        } else if (role === 'Intern') {
-
-            newTeam= new Intern(name, badgeNumber, email, userName);
-
-        } else if (role === 'Manager') {
-
-            newTeam = new Manager(name, badgeNumber, email, userName);
-        }
-
-        team.push(newMember);
-        
-        addHTML(newMember).then(function() {
-
-            if (addMoreMembers === "yes") {
-
-                member();
-            } else {
-                endHTML();
+        .then(function({role, name, id, email, userName}){
+            let roleInfo = "";
+            if (role === "Engineer") {
+                roleInfo = "gitHub userName";
+            }else if ( role === "Intern" ) {
+                roleInfo = "School Name";
             }
+            
+            inquirer.prompt([{
+                message: `Enter team member's ${roleInfo}`,
+                name: "roleInfo"
+            },
+            {
+                type: 'list',
+                name: 'addMoreMembers',
+                message: 'Do you want to add another team member?',
+                choices: ['yes','no'],
+                name: "members"
+            }])
+    
+        })    
+    }
 
-        });
 
-    });
+    
+
+
 
 
 
