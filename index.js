@@ -1,20 +1,13 @@
-//const Employee = require ('./lib/employee')
-const Engineer = require('./lib/engineer');
-const Intern = require('./lib/intern');
-const Manager = require('./lib/manager');
-
 const inquirer = require('inquirer');
 const fs = require('fs');
-const path = require('path');
-const generateHTML = require ('./generateHTML.js')
 
-const output_dir = path.resolve(__dirname, "output");
-//const outputPath = path.join(output_dir, "generatedHtml")
+const Engineer = require('./lib/class/Engineer');
+const Intern = require('./lib/class/Intern');
+const Manager = require('./lib/class/Manager');
+
+const generateHTML = require ('./lib/generateHTML.js')
 
 const myTeam = [];
-//const Manager = [];
-//const Engineer =[];
-//const Intern = [];
 
 function managerData() {
 
@@ -117,11 +110,23 @@ function addMyteam() {
                 return addMyteam();
             }
             else{
-                console.log(myTeam)
+                
+                if (fs.existsSync("./dist") === false) {
+                    fs.mkdirSync("./dist", {
+                        recursive: true
+                    });
+                }
+
+                const html = generateHTML(myTeam);
+                fs.writeFile("./dist/index.html", html,  function(err, result) {
+                    if(err) console.log('error', err);
+                });
             }
 
         })
     })
 }
+
+
  
 managerData()
